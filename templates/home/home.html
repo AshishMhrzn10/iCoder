@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title %}
+{% block homeactive %} active {% endblock homeactive %}
+
+{% block body %}
+  <div class="container my-3">
+    <div class="jumbotron">
+      <h1 class="display-4">Welcome to iCoder</h1>
+      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <hr class="my-4">
+      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <a class="btn btn-primary btn-lg" href="/blog" role="button">Go to blog</a>
+    </div>
+  </div>
+
+  <div class="container">
+  <h2>Popular Blogposts:</h2>
+  {% for post in allPosts %}
+    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary">Article by {{post.author}}</strong>
+          <h3 class="mb-0">{{post.title}}</h3>
+          <div class="mb-1 text-muted">{{post.timestamp}}</div>
+          <p class="card-text mb-auto">{{post.content | truncatechars:300}}</p>
+          <a href="{{post.slug}}" class="stretched-link">Continue reading</a>
+        </div>
+        <div class="col-auto d-none d-lg-block"></div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock body %}
