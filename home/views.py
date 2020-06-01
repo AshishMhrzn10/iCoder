@@ -3,6 +3,7 @@ from home.models import Contact
 from blog.models import Post
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 def home(request):
     allPosts = Post.objects.all()
@@ -55,14 +56,48 @@ def handleSignup(request):
         pass2 = request.POST['pass2']
 
         #Check error inputs
+        #username must be under 10 characters
+        if len(username)>10:
+            messages.error(request,"Username must be under 10 characters")
+            return redirect('home')
+        #username must be alphanumeric
+        if not username.isalnum():
+            messages.error(request,"Username must only contain letters and numbers")
+            return redirect('home')
+        #password must match
+        if pass1 != pass2:
+            messages.error(request,"Passwords don't match")
+            return redirect('home')
 
         #Create the user
         myuser = User.objects.create_user(username,email,pass1)
         myuser.first_name = fname
         myuser.last_name = lname
         myuser.save()
-        messages.success(request,"Your iCoder account has been successfully created")
+        messages.success(request,"Your iCoder account has been successfully created.")
         return redirect('home')
-
     else:
         return HttpResponse("Error!!404-not-found")
+
+
+def handleLogin(request):
+    if request.method == 'POST':
+        #Get post parameters
+        loginusername = request.POST['loginusername']
+        loginpassword = request.POST['loginpassword']
+        user = authenticate(username=loginusername, password=loginpassword)
+        if user is not None:
+            login(request,user)
+            messages.success(request,"Succesfully logged in")
+            return redirect('home')
+        else:
+            messages.error(request,"Invalid username and password")
+            return redirect('home')
+
+    return HttpResponse("Error!!404-not-found")
+
+
+def handleLogout(request):
+    logout(request)
+    messages.success(request,"Succesfully logged out")
+    return redirect('home')
