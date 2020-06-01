@@ -2,11 +2,33 @@
 {% block title %}blog post{% endblock title %}
 {% block blogactive %}active{% endblock blogactive %}
 {% block body %}
-  <div class="container my-3">
-        <h2 class="blog-post-title">{{post.title}}</h2>
-        <p class="blog-post-meta">{{post.timestamp}} <a href="/about">{{post.author}}</a></p>
-        <hr>
-        <p>{{post.content}}</p>
-        <hr>
-      </div>
+<div class="container my-3">
+  <h2 class="blog-post-title">{{post.title}}</h2>
+  <p class="blog-post-meta">{{post.timestamp}} <a href="/about">{{post.author}}</a></p>
+  <hr>
+  <p>{{post.content}}</p>
+  <hr>
+</div>
+<div class="container">
+  <h2>Comments</h2>
+  <form action="/blog/postcomment/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="exampleInputEmail1">Post your comment</label>
+      <input type="text" class="form-control" name="comment" placeholder="Enter comment here">
+    </div>
+    <input type="hidden" name="postSno" value={{post.sno}}>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  {% for comment in comments %}
+  <div class="row my-3">
+    <div class="col-md-1"><img src="/static/img/user.jpg/" alt="user" class="rounded mx-auto d-block w-100"></div>
+    <div class="col-md-11">
+      <b>{{comment.user.username}}</b> at {{comment.timestamp}}
+      <div>{{comment.comment}}</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
 {% endblock body %}
