@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}blog home{% endblock title %}
+{% block js %}
+  <script>
+    let previews = document.getElementsByClassName('preview');
+    Array.from(previews).forEach((element)=>{
+      element.innerHTML=element.innerText;
+    })
+  </script>
+{% endblock js %}
 {% block blogactive %} active {% endblock blogactive %}
 {% block body %}
   <div class="container my-3">
@@ -7,10 +15,10 @@
   {% for post in allPosts %}
     <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary">Article by {{post.author}}</strong>
-          <h3 class="mb-0">{{post.title}}</h3>
+          <strong class="d-inline-block mb-2 text-primary">Article by {{post.author}}({{post.views}} views)</strong>
+          <h3 class="mb-0"><a class="text-dark" href="{{post.slug}}">{{post.title}}</a></h3>
           <div class="mb-1 text-muted">{{post.timestamp}}</div>
-          <p class="card-text mb-auto">{{post.content | truncatechars:500}}</p>
+          <p class="card-text mb-auto"><div class="preview">{{post.content|safe|truncatechars:300}}</div></p>
           <div class="my-2"><a href="{{post.slug}}"><button type="button" class="btn btn-primary">Continue Reading</button></a></div>
         </div>
         <div class="col-auto d-none d-lg-block"></div>

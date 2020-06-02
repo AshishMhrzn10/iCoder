@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 def home(request):
-    allPosts = Post.objects.all()
+    allPosts = Post.objects.order_by('-views')[:3]
     context = {'allPosts': allPosts}
     return render(request, 'home/home.html',context)
 
